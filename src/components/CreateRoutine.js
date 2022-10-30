@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { callApi } from '../api';
 
-const CreateRoutine = ({ routines, setRoutines, token, user }) => {
+const CreateRoutine = ({ setRoutines, token}) => {
     const [routineName, setRoutineName] = useState('');
     const [routineGoal, setRoutineGoal] = useState('');
     const [isPublic, setIsPublic] = useState(false);
     const [error, setError] = useState('');
-
-    const handleSubmit = async (event, name, goal, isPublic) => {
 
         const handleSubmit = async (event) => {
             event.preventDefault();
@@ -22,10 +20,8 @@ const CreateRoutine = ({ routines, setRoutines, token, user }) => {
                 setError(error);
             }
         }
-
     return (
         <div>
-        <div>{error && <p>{error}</p>}</div>
         <div>
             {token && 
                 <div className="container">
@@ -51,8 +47,14 @@ const CreateRoutine = ({ routines, setRoutines, token, user }) => {
                     </div>
                 </div>}
             </div>
+        <div>
+            {error && 
+                <div className="alert alert-danger" role="alert">
+                    {error}
+                </div>}
+        </div>
         </div>
     )}
-}
+
 
 export default CreateRoutine;

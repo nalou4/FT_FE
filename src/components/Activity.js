@@ -15,9 +15,7 @@ const Activity = ({activity}) => {
                             :
                             null
                         }
-
                 </div>
-
             </div>
         </>
     )

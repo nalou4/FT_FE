@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const Activities = ({ activities, token, setActivities }) => {
+import CreateActivity from "./CreateActivity";
+
+const Activities = ({ activities, setActivities, token, user }) => {
 
     const [searchValue, setSearchValue] = useState("");
+
     const postMatches = (post) => {
         const textToCheck = (
             post.name + post.description
@@ -15,6 +18,7 @@ const Activities = ({ activities, token, setActivities }) => {
         return post ? postMatches(post) : false;
     });
 
+
     return (
         <div className="container">
             <h2 className="text-center text-light bg-secondary">Find an Activity</h2>
@@ -25,6 +29,11 @@ const Activities = ({ activities, token, setActivities }) => {
                     />
                     <button type="button" className="btn btn-outline-primary">search</button>
                 </div>
+
+                <div>
+                    <CreateActivity setActivities={setActivities} token={token} />
+                </div>
+
                 <div>
                     {filteredPosts.map((p) => (
                             <div key={p.id} className="card">
