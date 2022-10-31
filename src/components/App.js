@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { callApi } from "../api";
 
 import Home from "./Home";
@@ -16,8 +16,9 @@ const App = () => {
     const [activities, setActivities] = useState([]);
     const [token, setToken] = useState(window.localStorage.getItem('token') || "");
     const [user, setUser] = useState(null);
-    const [routines, setRoutines] = useState([]);
+
     const [error, setError] = useState('');
+ 
 
     useEffect(() => {
         window.localStorage.setItem("token", token);
@@ -36,18 +37,6 @@ const App = () => {
         getActivities()
     }, [token])
     
-    useEffect(() => {
-        const getRoutines = async () => {
-            try {
-                const routines = await callApi({ path: "routines" });
-                setRoutines(routines);
-            } catch (error) {
-                console.log(error);
-                setError(error);
-            }
-        };
-        getRoutines()
-    }, [token])
 
     useEffect(() => {
         try {
@@ -74,15 +63,14 @@ const App = () => {
             <Navigation token={token} setToken={setToken} setUser={setUser} />
             <Routes>
                 <Route path="/" element={<Home user={user} token={token}/>} />
-                <Route path="/users/me" element={<MyProfile routines={routines} setRoutines={setRoutines} setActivities={setActivities} token={token} user={user} />} />
+                <Route path="/users/:action" element={<AccountForm setToken={setToken} />}></Route>
+                <Route path="/routines" element={<Routines token={token} user={user} />}></Route>
+                <Route path="/routines/:routineId" element={<Routines token={token} user={user} />}></Route>
+                <Route path="/users/me" element={<MyProfile token={token} user={user} />} />
                 <Route path="/activities" element={<Activities activities={activities} setActivities={setActivities} token={token} user={user}/>} />
                 <Route path="/Activities/:postId" element={<Activity activities={activities} setActivities={setActivities} token={token} user={user} />} ></Route>
-                {/* <Route path="/user/routines" element={<RoutinesByUser user={user} routines={routines} setRoutines={setRoutines}/>}></Route> */}
-                <Route path="/users/:action" element={<AccountForm setToken={setToken} />}></Route>
-                <Route path="/routines" element={<Routines routines={routines} name={name} />}></Route>
-                <Route path="/user/routines" element={<RoutinesByUser activities={activities} setActivities={setActivities} routines={routines} setRoutines={setRoutines} user={user} token={token} />}></Route>
+                <Route path="/users/:username/routines" element={<RoutinesByUser token={token} user={user} />}></Route>
             </Routes>
-            
         </>
     );
 };

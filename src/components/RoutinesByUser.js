@@ -3,35 +3,46 @@
 import { useState, useEffect } from "react";
 import { callApi } from "../api";
 import Routine from "./Routine";
-import CreateRoutine from "./CreateRoutine";
 
-const RoutinesByUser = ({ activities, setActivities, routines, setRoutines, user, token}) => {
+const RoutinesByUser = ({token, user}) => {
 
-    const [routinesByUser, setRoutinesByUser] = useState([]);
+    const [userRoutines, setUserRoutines] = useState([]);
 
-    useEffect(()=>{
+    // {activities, setActivities, routines, setRoutines, userRoutines, setUserRoutines, token, user}
+
+    // console.log('hello');
+
+    // console.log('props :>> ', props);
+
+    const [error, setError] = useState('');
+
+    useEffect(() => {
         const getUserRoutines = async () => {
-            if (user) {
-                const path = `users/${user.username}/routines/`
-                const routines = await callApi({path: path})
+            try {
+                console.log('user :>> ', user);
+                console.log('token :>> ', token);
+                const path = `users/${user.username}/routines`
+                const routines = await callApi({token, path: path });
                 console.log('routines :>> ', routines);
-                setRoutinesByUser(routines);
+                setUserRoutines(routines);
+            } catch (error) {
+                console.log(error);
+                setError(error)
             }
         }
         getUserRoutines();
-    }, []);
+    }, [setUserRoutines, user]);
 
-    const userRoutines = routines.filter(routine => user.username === routine.creatorName);
+    // const userRoutines = routines.filter(routine => user.username === routine.creatorName);
 
     return (
         <div>
-            <h1>Routines</h1>
+            <h1>My Routines</h1>
             {
-                routinesByUser.map(routine => {
-                    return <Routine key={routine.id} activities={activities} setActivities={setActivities} setRoutines={setRoutines} token={token} user={user}/>
+                userRoutines.map(routine => {
+                    return <Routine key={routine.id} routine={routine} />
                 })
             }
-            {<CreateRoutine token={token} setRoutines={setRoutines}/>}
         </div>
     )
 }

@@ -1,17 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { callApi } from "../api";
 
-function MyProfile({ setRoutines, setActivities, token, user }) {
-    const [routineName, setRoutineName] = useState('');
-    const [routineGoal, setRoutineGoal] = useState('');
-    const [isPublic, setIsPublic] = useState(false);
-    const [routineError, setRoutineError] = useState('');
+import RoutinesByUser from "./RoutinesByUser";
 
-    const [activityName, setActivityName] = useState('');
-    const [activityDescription, setActivityDescription] = useState('');
-    const [activityError, setActivityError] = useState('');
+function MyProfile({ user, token}) {
+
+    const [error, setError] = useState('');
 
     if (!user) return null;
 
@@ -28,33 +24,45 @@ function MyProfile({ setRoutines, setActivities, token, user }) {
                         )}
                     </div>
                     <div>
-                        {token && 
+                        {token &&
                             <div className="container">
                                 <div className="container">
                                     <h2 className="text-center">Create a routine</h2>
-                                    <Link to="/user/routines">Create a routine</Link>
-                                    
+                                    <Link to="/routines">Create a routine</Link>
+
                                 </div>
                             </div>}
-
-
                     </div>
                     <div>
-                        {token && 
+                        {token &&
                             <div className="container">
                                 <div className="container">
                                     <h2 className="text-center">Create an activity</h2>
-
                                     <Link to="/activities">Create an activity</Link>
                                 </div>
                             </div>}
                     </div>
                     <div>
-                        {/* {
-                            user.routines.filter((post) => post.active).map((p) => (
-                                <RoutinesByUser key={p.id} post={p}/>
-                            ))
-                        } */}
+                        <div className="container">
+                            <h1 className="text-center text-light bg-secondary">My routines</h1>
+                            {/* <div>
+                                <div className='container'>
+                                    <div className='container'>
+                                        <div className="card" >
+                                            <div className="card-body">
+                                                <h2 className="card-title">Routine name: {myRoutines.name}</h2>
+                                                <div>
+                                                    {activities.map(activity => <Activity key={activity.id} activity={activity} />)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> */}
+
+                            {<RoutinesByUser token={token} user={user} />}
+
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,25 +1,33 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { callApi } from '../api';
 
 const CreateRoutine = ({ setRoutines, token}) => {
-    const [routineName, setRoutineName] = useState('');
-    const [routineGoal, setRoutineGoal] = useState('');
+    const [name, setName] = useState('');
+    const [goal, setGoal] = useState('');
     const [isPublic, setIsPublic] = useState(false);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-        const handleSubmit = async (event) => {
-            event.preventDefault();
-            try {
-                const { newRoutine } = await callApi({ token, method: 'POST', path: "routines", body: { name: routineName, goal: routineGoal, isPublic } });
-                setRoutines((prev) => [newRoutine, ...prev]);
-                setRoutineName("");
-                setRoutineGoal("");
-                setIsPublic(false);
-            } catch (error) {
-                console.log(error);
-                setError(error);
-            }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const newRoutine = await callApi({ token, method: 'POST', path: "routines", body: {
+                name, 
+                goal, 
+                isPublic 
+            }});
+            // setRoutines((prev) => [newRoutine, ...prev]);
+            setName("");
+            setGoal("");
+            setIsPublic(false);
+            navigate("/users/me");
+        } catch (error) {
+            console.log(error);
+            setError(error);
         }
+    }
+
     return (
         <div>
         <div>
@@ -30,7 +38,8 @@ const CreateRoutine = ({ setRoutines, token}) => {
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlInput1">Routine name</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1"/>
+                                <input type="text" className="form-control" id="exampleFormControlInput1"
+                                onChange={(e) => setName(e.target.value)}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlTextarea1">Routine goal</label>
@@ -38,10 +47,9 @@ const CreateRoutine = ({ setRoutines, token}) => {
                             </div>
                             
                             <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
+                                <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"onChange={(e) => setGoal(e.target.value)}/>
                                 <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Make public</label>
                             </div>
-                            
                             <button type="submit" className="btn btn-primary btn-block mb-4">Submit</button>
                         </form>
                     </div>

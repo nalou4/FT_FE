@@ -1,14 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { callApi } from "../api";
 
 function CreateActivity({ setActivities, token }) {
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [activityError, setActivityError] = useState('');
-
-    const navigate = useNavigate();
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         try {
@@ -22,7 +19,7 @@ function CreateActivity({ setActivities, token }) {
             setDescription("");
         } catch (error) {
             console.log(error);
-            setActivityError(activityError);
+            setError(error);
         }
     }
 
@@ -50,9 +47,9 @@ function CreateActivity({ setActivities, token }) {
                                     onChange={(event) => setDescription(event.target.value)}/>
                             </div>
                             <button type="submit" className="btn btn-primary btn-block mb-4">Submit</button>
-                            {activityError &&
+                            {error &&
                                 <div className="alert alert-danger" role="alert">
-                                    {activityError}
+                                    {error}
                                 </div>}
                         </form>
                     </div>

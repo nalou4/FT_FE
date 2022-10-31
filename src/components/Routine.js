@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Activity from './Activity';
 
-const Routine = ({ routine, setRoutines, token, user }) => {
+const Routine = ({ routine }) => {
 
     const { activities } = routine;
 
@@ -15,7 +15,7 @@ const Routine = ({ routine, setRoutines, token, user }) => {
                             <h3 className="card-subtitle mb-2 text-muted">Creator: {routine.creatorName}</h3>
                             <p className="card-text">Goal: {routine.goal}</p>
                             <div>
-                                {activities.map(activity => <Activity key={activity.id} activity={activity} />)}
+                                {activities?.map(activity => <Activity key={activity.id} activity={activity} />)}
                             </div>
                         </div>
                     </div>
